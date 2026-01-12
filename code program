@@ -1,0 +1,270 @@
+# ============================================
+# CLASS DATA - Menyimpan data mahasiswa
+# ============================================
+
+#di bagian ini menyimpan data satu mahasiswa dengan atribut:
+
+#nim: nomor identitas mahasiswa
+#nama: nama mahasiswa
+#jurusan: program studi
+#ipk: indeks prestasi kumulatif
+
+#Metode __str__() digunakan untuk menampilkan data dalam format string yang terformat.
+
+class Mahasiswa:
+    def __init__(self, nim, nama, jurusan, ipk):
+        self.nim = nim
+        self.nama = nama
+        self.jurusan = jurusan
+        self.ipk = ipk
+
+    def __str__(self):
+        return f"{self.nim} | {self.nama} | {self.jurusan} | {self.ipk}"
+
+
+# ============================================
+# CLASS PROCESS - Logika bisnis/proses data
+# ============================================
+
+# bagian ini menangani logika bisnis dan penyimpanan data. Berisi:
+#Validasi Data:
+
+#validasi_nim(): Memastikan NIM berupa angka 8 digit dan tidak duplikat
+#validasi_nama(): Memastikan nama minimal 3 karakter dan hanya huruf/spasi
+#validasi_jurusan(): Memastikan jurusan sesuai daftar yang tersedia
+#validasi_ipk(): Memastikan IPK berupa angka antara 0.0-4.0
+
+#Operasi Data (CRUD):
+
+#tambah_mahasiswa(): Menambah mahasiswa baru dengan validasi
+#hapus_mahasiswa(): Menghapus mahasiswa berdasarkan NIM
+#cari_mahasiswa(): Mencari data mahasiswa
+#get_semua_mahasiswa(): Mengambil semua data mahasiswa
+
+class ProsesMahasiswa:
+    def __init__(self):
+        self.daftar_mahasiswa = []
+
+    def validasi_nim(self, nim):
+        """Validasi NIM harus numeric dan 9 digit"""
+        if not nim.isdigit() or len(nim) != 9:
+            raise ValueError("NIM harus numeric dan terdiri dari 9 digit!")
+        if any(m.nim == nim for m in self.daftar_mahasiswa):
+            raise ValueError(f"NIM {nim} sudah terdaftar!")
+        return True
+
+    def validasi_nama(self, nama):
+        """Validasi nama tidak boleh kosong dan minimal 3 karakter"""
+        if not nama or len(nama.strip()) < 3:
+            raise ValueError("Nama minimal harus 3 karakter!")
+        if not nama.replace(" ", "").isalpha():
+            raise ValueError("Nama hanya boleh mengandung huruf dan spasi!")
+        return True
+
+    def validasi_jurusan(self, jurusan):
+        """Validasi jurusan dari list yang tersedia"""
+        jurusan_valid = ["Teknik Informatika", "Sistem Informasi", "Ilmu Komputer"]
+        if jurusan not in jurusan_valid:
+            raise ValueError(f"Jurusan harus: {', '.join(jurusan_valid)}")
+        return True
+
+    def validasi_ipk(self, ipk):
+        """Validasi IPK antara 0.0 hingga 4.0"""
+        try:
+            ipk_float = float(ipk)
+            if ipk_float < 0.0 or ipk_float > 4.0:
+                raise ValueError("IPK harus antara 0.0 hingga 4.0!")
+            return True
+        except ValueError:
+            raise ValueError("IPK harus berupa angka desimal!")
+
+    def tambah_mahasiswa(self, nim, nama, jurusan, ipk):
+        """Tambah mahasiswa dengan validasi"""
+        self.validasi_nim(nim)
+        self.validasi_nama(nama)
+        self.validasi_jurusan(jurusan)
+        self.validasi_ipk(ipk)
+        
+        mahasiswa = Mahasiswa(nim, nama.title(), jurusan, ipk)
+        self.daftar_mahasiswa.append(mahasiswa)
+        return True
+
+    def hapus_mahasiswa(self, nim):
+        """Hapus mahasiswa berdasarkan NIM"""
+        for i, m in enumerate(self.daftar_mahasiswa):
+            if m.nim == nim:
+                self.daftar_mahasiswa.pop(i)
+                return True
+        raise ValueError(f"Mahasiswa dengan NIM {nim} tidak ditemukan!")
+
+    def cari_mahasiswa(self, nim):
+        """Cari mahasiswa berdasarkan NIM"""
+        for m in self.daftar_mahasiswa:
+            if m.nim == nim:
+                return m
+        return None
+
+    def get_semua_mahasiswa(self):
+        """Dapatkan semua data mahasiswa"""
+        return self.daftar_mahasiswa
+
+# ============================================
+# CLASS VIEW - Menampilkan data ke user
+# ============================================
+
+#bagian ini menampilkan antarmuka kepada user:
+
+#tampilkan_header(): Menampilkan judul aplikasi
+#tampilkan_menu(): Menampilkan pilihan menu
+#input_mahasiswa_baru(): Form input data mahasiswa baru
+#tampilkan_tabel_mahasiswa(): Menampilkan semua data dalam bentuk tabel
+#cari_dan_tampilkan(): Interface untuk mencari mahasiswa
+#hapus_mahasiswa_view(): Interface untuk menghapus data
+
+class ViewMahasiswa:
+    def __init__(self, proses):
+        self.proses = proses
+
+    def tampilkan_header(self):
+        """Tampilkan header"""
+        print("\n" + "="*70)
+        print("SISTEM MANAJEMEN DATA MAHASISWA".center(70))
+        print("="*70 + "\n")
+
+    def tampilkan_menu(self):
+        """Tampilkan menu utama"""
+        print("Menu:")
+        print("1. Tambah Data Mahasiswa")
+        print("2. Tampilkan Semua Data Mahasiswa")
+        print("3. Cari Mahasiswa")
+        print("4. Hapus Data Mahasiswa")
+        print("5. Keluar")
+        print("-" * 70)
+
+    def input_mahasiswa_baru(self):
+        """Input data mahasiswa dari user"""
+        try:
+            print("\n--- Masukkan Data Mahasiswa Baru ---")
+            nim = input("NIM (8 digit): ").strip()
+            nama = input("Nama: ").strip()
+            
+            print("\nPilihan Jurusan:")
+            print("1. Teknik Informatika")
+            print("2. Sistem Informasi")
+            print("3. Ilmu Komputer")
+            pilihan = input("Pilih jurusan (1-3): ").strip()
+            
+            jurusan_map = {
+                "1": "Teknik Informatika",
+                "2": "Sistem Informasi",
+                "3": "Ilmu Komputer"
+            }
+            
+            if pilihan not in jurusan_map:
+                raise ValueError("Pilihan jurusan tidak valid!")
+            
+            jurusan = jurusan_map[pilihan]
+            ipk = input("IPK (0.0 - 4.0): ").strip()
+            
+            self.proses.tambah_mahasiswa(nim, nama, jurusan, ipk)
+            print("✓ Data mahasiswa berhasil ditambahkan!")
+            return True
+        except ValueError as e:
+            print(f"✗ Error: {e}")
+            return False
+
+    def tampilkan_tabel_mahasiswa(self):
+        """Tampilkan semua mahasiswa dalam bentuk tabel"""
+        mahasiswa_list = self.proses.get_semua_mahasiswa()
+        
+        if not mahasiswa_list:
+            print("\n✗ Belum ada data mahasiswa!")
+            return
+        
+        print("\n" + "-"*70)
+        print(f"{'NIM':<10} {'Nama':<20} {'Jurusan':<25} {'IPK':<8}")
+        print("-"*70)
+        
+        for mhs in mahasiswa_list:
+            print(f"{mhs.nim:<10} {mhs.nama:<20} {mhs.jurusan:<25} {mhs.ipk:<8}")
+        
+        print("-"*70)
+        print(f"Total: {len(mahasiswa_list)} mahasiswa\n")
+
+    def cari_dan_tampilkan(self):
+        """Cari dan tampilkan data mahasiswa"""
+        try:
+            nim = input("\nMasukkan NIM yang dicari: ").strip()
+            mahasiswa = self.proses.cari_mahasiswa(nim)
+            
+            if mahasiswa:
+                print("\n" + "-"*70)
+                print(f"{'NIM':<10} {'Nama':<20} {'Jurusan':<25} {'IPK':<8}")
+                print("-"*70)
+                print(f"{mahasiswa.nim:<10} {mahasiswa.nama:<20} {mahasiswa.jurusan:<25} {mahasiswa.ipk:<8}")
+                print("-"*70 + "\n")
+            else:
+                print(f"\n✗ Mahasiswa dengan NIM {nim} tidak ditemukan!\n")
+        except Exception as e:
+            print(f"✗ Error: {e}")
+
+    def hapus_mahasiswa_view(self):
+        """Hapus mahasiswa melalui view"""
+        try:
+            nim = input("\nMasukkan NIM mahasiswa yang akan dihapus: ").strip()
+            self.proses.hapus_mahasiswa(nim)
+            print("✓ Data mahasiswa berhasil dihapus!")
+        except ValueError as e:
+            print(f"✗ Error: {e}")
+
+
+# ============================================
+# MAIN - Program Utama
+# ============================================
+
+# Loop utama yang:
+
+#Menampilkan menu pilihan
+#Menjalankan fungsi sesuai pilihan user (1-5)
+#Program berhenti saat user memilih opsi 5 (Keluar)
+
+#Fitur Utama Aplikasi
+
+#✅ Tambah data mahasiswa dengan validasi otomatis
+#✅ Tampilkan semua data dalam format tabel
+#✅ Cari mahasiswa berdasarkan NIM
+#✅ Hapus data mahasiswa
+#✅ Pesan error yang informatif
+
+def main():
+    proses = ProsesMahasiswa()
+    view = ViewMahasiswa(proses)
+    
+    view.tampilkan_header()
+    
+    while True:
+        view.tampilkan_menu()
+        pilihan = input("Pilih menu (1-5): ").strip()
+        
+        if pilihan == "1":
+            view.input_mahasiswa_baru()
+        
+        elif pilihan == "2":
+            view.tampilkan_tabel_mahasiswa()
+        
+        elif pilihan == "3":
+            view.cari_dan_tampilkan()
+        
+        elif pilihan == "4":
+            view.hapus_mahasiswa_view()
+        
+        elif pilihan == "5":
+            print("\n✓ Terima kasih! Program selesai.\n")
+            break
+        
+        else:
+            print("✗ Pilihan tidak valid! Silakan coba lagi.\n")
+
+
+if __name__ == "__main__":
+    main()
