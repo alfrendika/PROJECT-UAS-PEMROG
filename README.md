@@ -13,22 +13,6 @@ Fitur Utama
 ✅ Hapus Data - Menghapus data mahasiswa berdasarkan NIM
 ✅ Validasi Ketat - Validasi untuk NIM, Nama, Jurusan, dan IPK
 
-Cara Menggunakan
-1. Clone Repository
-bashgit clone https://github.com/username/sistem-manajemen-mahasiswa.git
-cd sistem-manajemen-mahasiswa
-2. Jalankan Program
-bashpython main.py
-3. Pilih Menu
-Setelah program berjalan, Anda akan melihat menu utama:
-Menu:
-1. Tambah Data Mahasiswa
-2. Tampilkan Semua Data Mahasiswa
-3. Cari Mahasiswa
-4. Hapus Data Mahasiswa
-5. Keluar
-Masukkan angka (1-5) untuk memilih menu yang diinginkan.
-
 📖 Panduan Penggunaan
 Menambah Data Mahasiswa (Menu 1)
 
