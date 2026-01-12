@@ -39,7 +39,7 @@ Masukkan NIM (9 digit, harus numeric)
 
 Masukkan Nama (minimal 3 karakter, hanya huruf dan spasi)
 
-   Nama: john doe
+   Nama: maul
 
 Pilih Jurusan (1-3)
 
@@ -62,8 +62,8 @@ Sistem akan menampilkan tabel semua mahasiswa:
 ----------------------------------------------------------------------
 NIM         Nama                 Jurusan                   IPK
 ----------------------------------------------------------------------
-123456789   John Doe             Teknik Informatika        3.85
-987654321   Jane Smith           Sistem Informasi          3.50
+123456789   maul                 Teknik Informatika        3.85
+987654321   Frendika             Sistem Informasi          3.50
 ----------------------------------------------------------------------
 Total: 2 mahasiswa
 Cari Mahasiswa (Menu 3)
